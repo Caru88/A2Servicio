@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A2Servicio — Marketplace de servicios (MVP)</title>
+  <meta name="description" content="Conectamos personas que necesitan un servicio con prestadores verificados. Pagos seguros, agenda y soporte." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif}</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Top bar -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-indigo-700">A2Servicio</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#como-funciona" class="hover:text-indigo-700">Cómo funciona</a>
+        <a href="#categorias" class="hover:text-indigo-700">Categorías</a>
+        <a href="#metodo" class="hover:text-indigo-700">Solicitar servicio</a>
+        <a href="#postular-oferente" class="hover:text-indigo-700">Postular oferente</a>
+        <a href="#faq" class="hover:text-indigo-700">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <span id="userBadge" class="hidden md:inline text-xs px-2 py-1 rounded-lg bg-slate-100 border">Invitado</span>
+        <button id="btnLogin" class="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-100">Ingresar / Registrarme</button>
+        <a href="#metodo" class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">Contratar</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero + Acceso rápido -->
+  <section class="relative">
+    <div class="max-w-6xl mx-auto px-4 py-14 grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-semibold leading-tight">Contratá servicios confiables en minutos.</h1>
+        <p class="mt-4 text-lg text-slate-600">Pagá de forma segura, coordiná por agenda y calificá el trabajo. También podés ofrecer tus servicios y empezar a cobrar online.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#metodo" class="px-5 py-3 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700">Solicitar servicio</a>
+          <a href="#postular-oferente" class="px-5 py-3 rounded-2xl border border-slate-300 hover:bg-slate-100">Quiero ofrecer servicios</a>
+        </div>
+      </div>
+      <div class="bg-white rounded-3xl shadow p-6 border border-slate-100">
+        <h3 class="font-semibold mb-3">Acceso rápido</h3>
+        <form id="accessForm" class="space-y-3">
+          <div>
+            <label class="text-sm">Nombre y apellido</label>
+            <input type="text" id="accName" class="mt-1 w-full border rounded-xl px-3 py-2" placeholder="Tu nombre" required>
+          </div>
+          <div>
+            <label class="text-sm">WhatsApp</label>
+            <input type="tel" id="accPhone" class="mt-1 w-full border rounded-xl px-3 py-2" placeholder="Ej.: 3492 123456" required>
+          </div>
+          <div>
+            <label class="text-sm">Email (opcional)</label>
+            <input type="email" id="accEmail" class="mt-1 w-full border rounded-xl px-3 py-2" placeholder="tu@mail.com">
+          </div>
+          <button class="w-full mt-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">Ingresar / Crear ID</button>
+          <p class="text-xs text-slate-500">Al continuar creamos un ID para tus pedidos y guardamos tus datos en este dispositivo.</p>
+        </form>
+        <div id="accSuccess" class="hidden mt-3 text-sm p-3 rounded-xl bg-green-50 border border-green-200">¡Listo! Tu ID es <span id="accIdSpan" class="font-mono"></span>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Método de trabajo / Selección de servicio -->
+  <section id="metodo" class="py-16 bg-white border-y border-slate-200/60">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-semibold">Así funciona A2Servicio</h2>
+      <p class="mt-2 text-slate-600 max-w-3xl">1) Ingresás y obtenés tu <strong>ID</strong>. 2) Elegís el servicio. 3) Te mostramos una lista de oferentes con <em>calificación (1–5)</em>, <em>valor horario dinámico</em> y <em>experiencia</em>. 4) Reservás día y hora y coordinamos el pago. El valor horario se ajusta por demanda (agenda) y reputación: agendas completas y alta calificación elevan la tarifa.</p>
+      <div class="mt-6 grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <button class="svcBtn p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100" data-cat="Limpieza del hogar">Limpieza del hogar</button>
+        <button class="svcBtn p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100" data-cat="Limpieza de locales / empresas">Limpieza de locales / empresas</button>
+        <button class="svcBtn p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100" data-cat="Jardinería y corte de pasto">Jardinería y corte de pasto</button>
+        <button class="svcBtn p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100" data-cat="Plomería (por presupuesto)">Plomería (por presupuesto)</button>
+        <button class="svcBtn p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100" data-cat="Electricidad (por presupuesto)">Electricidad (por presupuesto)</button>
+        <button class="svcBtn p-4 rounded-2xl border bg-slate-50 hover:bg-slate-100" data-cat="Albañilería (por presupuesto)">Albañilería (por presupuesto)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Listado de oferentes -->
+  <section id="providersList" class="py-16 hidden">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-semibold">Oferentes para <span id="plCat"></span></h2>
+          <p class="text-sm text-slate-600">Valores por hora dinámicos = base × (1 + demanda × 0.5 + (rating-3) × 0.1).</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="plReload" class="text-sm px-3 py-1.5 rounded-lg border hover:bg-slate-100">Actualizar listado</button>
+          <a href="#metodo" id="plBack" class="text-sm underline">← Cambiar servicio</a>
+        </div>
+      </div>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-2 pr-4">Oferente</th>
+              <th class="py-2 pr-4">Calif.</th>
+              <th class="py-2 pr-4">$/hora</th>
+              <th class="py-2 pr-4">Exp.</th>
+              <th class="py-2 pr-4">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="plBody"></tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-xs text-slate-500">Tip: las agendas completas y las buenas reseñas incrementan el valor horario. Si un profesional baja su ocupación o rating, el valor se ajusta a la baja.</p>
+    </div>
+  </section>
+
+  <!-- Solicitar servicio: formulario clásico + declaración -->
+  <section id="solicitar-servicio" class="py-16 bg-white border-y border-slate-200/60">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8">
+      <div>
+        <h2 class="text-2xl font-semibold">Solicitar un servicio</h2>
+        <p class="mt-2 text-slate-600">Elegí el tipo de servicio, a quién contratar, la forma de pago, día y hora. Requiere estar ingresado con tu ID.</p>
+        <ul class="mt-4 text-sm text-slate-700 list-disc list-inside">
+          <li>Si aún no tenés ID, usá el panel "Acceso rápido" de arriba.</li>
+          <li>En el MVP confirmamos por WhatsApp y el pago se hace con enlace (Mercado Pago).</li>
+        </ul>
+      </div>
+      <div class="bg-slate-50 border rounded-3xl p-6">
+        <form id="orderForm" class="space-y-4">
+          <div>
+            <label class="text-sm">Tu ID</label>
+            <input id="ofUserId" class="mt-1 w-full border rounded-xl px-3 py-2 font-mono" placeholder="Se completa automáticamente" required>
+          </div>
+          <div>
+            <label class="text-sm">Servicio</label>
+            <select id="ofCategory" class="mt-1 w-full border rounded-xl px-3 py-2" required>
+              <option value="">Seleccioná…</option>
+              <option>Limpieza del hogar</option>
+              <option>Limpieza de locales / empresas</option>
+              <option>Jardinería y corte de pasto</option>
+              <option>Plomería (por presupuesto)</option>
+              <option>Electricidad (por presupuesto)</option>
+              <option>Albañilería (por presupuesto)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm">Elegí al oferente</label>
+            <select id="ofProvider" class="mt-1 w-full border rounded-xl px-3 py-2" required>
+              <option value="">Seleccioná…</option>
+            </select>
+            <p class="text-xs text-slate-500 mt-1">Lista demostrativa; luego se pobla con tus prestadores verificados.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-sm">Fecha</label>
+              <input type="date" id="ofDate" class="mt-1 w-full border rounded-xl px-3 py-2" required>
+            </div>
+            <div>
+              <label class="text-sm">Hora</label>
+              <input type="time" id="ofTime" class="mt-1 w-full border rounded-xl px-3 py-2" required>
+            </div>
+          </div>
+          <div>
+            <label class="text-sm">Forma de pago</label>
+            <select id="ofPay" class="mt-1 w-full border rounded-xl px-3 py-2" required>
+              <option value="Mercado Pago">Mercado Pago (link)</option>
+              <option value="Transferencia">Transferencia</option>
+              <option value="Efectivo">Efectivo</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm">Detalles (metros/ambientes/observaciones)</label>
+            <textarea id="ofNotes" class="mt-1 w-full border rounded-xl px-3 py-2" rows="3"></textarea>
+          </div>
+          <div class="text-xs bg-white border rounded-xl p-3">
+            <p class="font-medium">Declaración del solicitante</p>
+            <p class="mt-1">Declaro que: (i) soy titular o tengo autorización para solicitar el servicio en el domicilio indicado; (ii) permitiré el acceso seguro al prestador en el horario acordado; (iii) revisaré el trabajo al finalizar y notificaré dentro de 48 h cualquier inconveniente para activar la mediación; (iv) conozco y acepto la política de cancelación y la modalidad de pago seleccionada.</p>
+            <label class="inline-flex items-center gap-2 mt-2"><input type="checkbox" id="ofAgree" required> <span>Acepto la declaración</span></label>
+          </div>
+          <button class="w-full px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">Enviar solicitud</button>
+          <p class="text-xs text-slate-500">Al enviar, se abrirá WhatsApp con el detalle para confirmar tu reserva.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Postulación de oferentes (Google Forms) -->
+  <section id="postular-oferente" class="py-16">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-start">
+      <div>
+        <h2 class="text-2xl font-semibold">¿Querés ofrecer tus servicios?</h2>
+        <p class="mt-2 text-slate-600">Unite como prestador verificado. Requisitos: DNI, monotributo, 3 referencias comprobables. Te enviamos trabajos y cobrás con comisión baja.</p>
+        <ul class="mt-4 space-y-2 text-slate-700 text-sm">
+          <li>✅ Agenda y notificaciones</li>
+          <li>✅ Clientes verificados</li>
+          <li>✅ Cobro seguro</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-3xl shadow p-6 border">
+        <div class="aspect-[4/3] w-full border rounded-xl overflow-hidden">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScK4KlDk7eLEe731RsQOpjx7YhnKdJV9-Lq6ojkDmOggP66JA/viewform?embedded=true" class="w-full h-full" title="Formulario oferente (Google Forms)"></iframe>
+        </div>
+        <div class="mt-2 text-xs"><a href="https://docs.google.com/forms/d/e/1FAIpQLScK4KlDk7eLEe731RsQOpjx7YhnKdJV9-Lq6ojkDmOggP66JA/viewform" target="_blank" class="underline">Abrir formulario en nueva pestaña</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-semibold">Preguntas frecuentes</h2>
+      <div class="mt-6 space-y-4">
+        <details class="p-4 rounded-xl border bg-white"><summary class="font-medium">¿Cómo funcionan los pagos?</summary><p class="mt-2 text-slate-700">En el MVP usamos enlaces de pago (Mercado Pago). El monto queda protegido y se libera al finalizar el servicio.</p></details>
+        <details class="p-4 rounded-xl border bg-white"><summary class="font-medium">¿Qué pasa si el trabajo sale mal?</summary><p class="mt-2 text-slate-700">Podés abrir una mediación, subir evidencia y buscaremos una solución justa.</p></details>
+        <details class="p-4 rounded-xl border bg-white"><summary class="font-medium">¿Emiten factura?</summary><p class="mt-2 text-slate-700">Sí. Los prestadores emiten la factura correspondiente (A/B/CF) y te la compartimos por email.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-10 text-sm text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <p>© <span id="year"></span> A2Servicio</p>
+      <div class="flex items-center gap-6">
+        <a href="#" class="hover:text-slate-700">Términos</a>
+        <a href="#" class="hover:text-slate-700">Privacidad</a>
+        <a href="mailto:hola@a2servicio.com" class="hover:text-slate-700">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Utilidades y estado =====
+    function genId(){
+      const n = Math.floor(100000 + Math.random()*900000); // 6 dígitos
+      return 'ID ' + n;
+    }
+
+    const state = {
+      adminWa: '5490000000000', // ← Reemplazar por tu número de WhatsApp con código país sin '+'
+      providers: [
+        {id:'p1', firstName:'Ana', lastName:'Guzmán', category:'Limpieza del hogar', baseRate:3500, rating:4.8, agendaLoad:0.9, exp:5},
+        {id:'p2', firstName:'Bruno', lastName:'Sosa', category:'Limpieza de locales / empresas', baseRate:3800, rating:4.6, agendaLoad:0.7, exp:4},
+        {id:'p3', firstName:'Juan', lastName:'Pereyra', category:'Jardinería y corte de pasto', baseRate:4200, rating:4.4, agendaLoad:0.6, exp:4},
+        {id:'p4', firstName:'Carla', lastName:'Bustamante', category:'Limpieza del hogar', baseRate:3200, rating:4.9, agendaLoad:1.0, exp:5},
+        {id:'p5', firstName:'Carlos', lastName:'Ríos', category:'Plomería (por presupuesto)', baseRate:0, rating:4.7, agendaLoad:0.8, exp:5},
+        {id:'p6', firstName:'Elena', lastName:'Busquets', category:'Electricidad (por presupuesto)', baseRate:0, rating:4.5, agendaLoad:0.5, exp:3},
+        {id:'p7', firstName:'Mario', lastName:'Alonso', category:'Albañilería (por presupuesto)', baseRate:0, rating:4.2, agendaLoad:0.4, exp:3}
+      ]
+    }
+
+    // URL PUBLICA del CSV de Google Sheets (Archivo → Publicar en la Web → Hoja → CSV)
+    const PROVIDERS_CSV = 'PASTE_SHEET_CSV_URL_HERE';
+
+    // ===== Helpers =====
+    function shortName(p){
+      const part = (p.lastName||'').slice(0,3).toUpperCase();
+      return `${p.firstName}${part}`;
+    }
+
+    function dynamicRate(p){
+      if(!p.baseRate) return 0;
+      return Math.round(p.baseRate * (1 + (p.agendaLoad*0.5) + ((p.rating-3)*0.1)) / 10) * 10; // redondeo a $10
+    }
+
+    // ===== Carga de prestadores desde CSV =====
+    async function loadProvidersFromCSV(){
+      if (!PROVIDERS_CSV || PROVIDERS_CSV.includes('PASTE_SHEET_CSV_URL_HERE')) { renderProviderSelect(); return; }
+      try {
+        const res = await fetch(PROVIDERS_CSV, {cache:'no-store'});
+        const text = await res.text();
+        const rows = text.trim().split(/\r?\n/).map(r=>r.split(','));
+        const headers = rows.shift().map(h=>h.trim().toLowerCase());
+        const out = rows.map((r,i)=>{
+          const obj = {}; headers.forEach((h,idx)=> obj[h] = (r[idx]||'').trim());
+          const toNum = v => parseFloat((v||'').replace(',', '.'))||0;
+          return {
+            id: obj.id || ('gs-'+(i+1)),
+            firstName: obj.nombre || obj.firstname || '',
+            lastName: obj.apellido || obj.lastname || '',
+            category: obj.categoria || obj.category || '',
+            baseRate: toNum(obj.baserate || obj.tarifa || obj.tarifa_hora),
+            rating: toNum(obj.rating || obj.calificacion) || 0,
+            agendaLoad: toNum(obj.ocupacion || obj.agenda || obj.agenda_load),
+            exp: toNum(obj.experiencia || obj.exp) || 0
+          };
+        });
+        state.providers = out.filter(p=>p.firstName && p.lastName && p.category);
+        renderProviderSelect();
+      } catch(e){ console.warn('No se pudo cargar el CSV:', e); }
+    }
+
+    // ===== Render del select "Elegí al oferente" =====
+    function renderProviderSelect(){
+      const provSel = document.getElementById('ofProvider');
+      if (!provSel) return;
+      provSel.innerHTML = '<option value="">Seleccioná…</option>';
+      state.providers.forEach(p=>{
+        const label = `${p.category.includes('presupuesto') ? '(Presupuesto) ' : ''}${shortName(p)} — ${p.category}`;
+        const o = document.createElement('option'); o.value=p.id; o.textContent=label; provSel.appendChild(o);
+      });
+    }
+
+    // ===== Acceso / Registro (localStorage) =====
+    function genUser(){
+      return {
+        id: genId(),
+        name: document.getElementById('accName').value.trim(),
+        phone: document.getElementById('accPhone').value.trim(),
+        email: document.getElementById('accEmail').value.trim()
+      }
+    }
+
+    function loadSession(){
+      const s = JSON.parse(localStorage.getItem('ats_user')||'null');
+      if (s && s.id){
+        const userBadge = document.getElementById('userBadge');
+        const ofUserId = document.getElementById('ofUserId');
+        userBadge.textContent = `ID: ${s.id}`; userBadge.classList.remove('hidden');
+        if (ofUserId) ofUserId.value = s.id;
+      }
+    }
+
+    // ===== Eventos UI =====
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('year').textContent=new Date().getFullYear();
+      loadSession();
+      loadProvidersFromCSV();
+
+      const accessForm = document.getElementById('accessForm');
+      accessForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        let rec = JSON.parse(localStorage.getItem('ats_user')||'null');
+        if(!rec){ rec = genUser(); } else {
+          rec.name=document.getElementById('accName').value.trim();
+          rec.phone=document.getElementById('accPhone').value.trim();
+          rec.email=document.getElementById('accEmail').value.trim();
+        }
+        localStorage.setItem('ats_user', JSON.stringify(rec));
+        document.getElementById('userBadge').textContent = `ID: ${rec.id}`;
+        document.getElementById('userBadge').classList.remove('hidden');
+        document.getElementById('accIdSpan').textContent = rec.id;
+        document.getElementById('accSuccess').classList.remove('hidden');
+        const ofUserId = document.getElementById('ofUserId');
+        if (ofUserId) ofUserId.value = rec.id;
+      });
+
+      // Botones de servicio → tabla de oferentes
+      document.querySelectorAll('.svcBtn').forEach(b=>b.addEventListener('click', ()=>{
+        const cat = b.getAttribute('data-cat');
+        document.getElementById('plCat').textContent = cat;
+        const plBody = document.getElementById('plBody');
+        plBody.innerHTML = '';
+        state.providers.filter(p=>p.category===cat).forEach(p=>{
+          const rate = dynamicRate(p);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="py-2 pr-4">${shortName(p)}</td>
+            <td class="py-2 pr-4">${p.rating.toFixed(1)} / 5</td>
+            <td class="py-2 pr-4">${rate ? '$'+rate.toLocaleString('es-AR') : 'Por presupuesto'}</td>
+            <td class="py-2 pr-4">${p.exp} / 5</td>
+            <td class="py-2 pr-4"><a href="#solicitar-servicio" class="text-indigo-700 underline" data-prov="${p.id}">Seleccionar</a></td>`;
+          plBody.appendChild(tr);
+        });
+        document.getElementById('providersList').classList.remove('hidden');
+        location.hash = '#providersList';
+      }));
+
+      // Acciones en la tabla
+      document.addEventListener('click', (e)=>{
+        if (e.target.matches('[data-prov]')){
+          const id = e.target.getAttribute('data-prov');
+          const provSel = document.getElementById('ofProvider');
+          const idx = Array.from(provSel.options).findIndex(o=>o.value===id);
+          if(idx>=0){ provSel.selectedIndex = idx; }
+        }
+        if (e.target.id === 'plReload'){
+          loadProvidersFromCSV();
+        }
+      });
+
+      // Envío por WhatsApp
+      document.getElementById('orderForm').addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const u = JSON.parse(localStorage.getItem('ats_user')||'null');
+        if(!u || !u.id){ alert('Primero ingresá / registrate para obtener tu ID.'); return; }
+        const cat = document.getElementById('ofCategory').value;
+        const prov = document.getElementById('ofProvider');
+        const provTxt = prov.options[prov.selectedIndex].text;
+        const date = document.getElementById('ofDate').value;
+        const time = document.getElementById('ofTime').value;
+        const pay = document.getElementById('ofPay').value;
+        const notes = document.getElementById('ofNotes').value;
+        const decl = document.getElementById('ofAgree').checked;
+        if(!decl){ alert('Debés aceptar la declaración.'); return; }
+        const msg = `Nueva solicitud A2Servicio%0AID: ${encodeURIComponent(u.id)}%0ANombre: ${encodeURIComponent(u.name)}%0AWA: ${encodeURIComponent(u.phone)}%0ACategoría: ${encodeURIComponent(cat)}%0AProveedor: ${encodeURIComponent(provTxt)}%0AFecha: ${date}%0AHora: ${time}%0APago: ${encodeURIComponent(pay)}%0ADetalles: ${encodeURIComponent(notes)}`;
+        const url = `https://wa.me/${state.adminWa}?text=${msg}`;
+        window.open(url, '_blank');
+      });
+    });
+  </script>
+</body>
+</html>
